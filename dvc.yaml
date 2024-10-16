@@ -1,0 +1,8 @@
+stages:
+  dataset_download:
+    cmd: python src/dataset_download.py
+    params:
+    - dataset
+    - split
+    outs:
+    - data/input
