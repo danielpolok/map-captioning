@@ -1,0 +1,26 @@
+[project]
+name = "captioning-pipeline"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Daniel Polok", email = "d4nielp0l0k@gmail.com"},
+]
+dependencies = [
+    "ollama>=0.3.3",
+    "google-cloud-aiplatform>=1.70.0",
+    "datasets>=3.0.1",
+    "ipykernel>=6.29.5",
+    "pillow>=10.4.0",
+    "python-dotenv>=1.0.1",
+    "openai>=1.51.2",
+    "dvc[parquet]>=3.55.2",
+    "certifi>=2024.8.30",
+    "python-box>=7.2.0",
+]
+requires-python = "==3.10.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
