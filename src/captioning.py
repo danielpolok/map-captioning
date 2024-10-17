@@ -115,7 +115,7 @@ def captioning():
         with_indices=True,
     )
 
-    dataset_captioned.remove_columns(["image_encoded"])
+    dataset_captioned = dataset_captioned.remove_columns(["image_encoded"])
 
     dataset_out_dir = Path("data") / "dataset" / "output"
 
