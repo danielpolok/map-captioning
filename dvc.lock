@@ -17,11 +17,11 @@ stages:
     params:
       params.yaml:
         captioning.model: gpt-4o-mini
-        captioning.prompt_template: complex
+        captioning.prompt_template: basic
         captioning.provider: openai
     outs:
     - path: data/dataset/output
       hash: md5
-      md5: 19ab586757c45f0d7051cb26ace9d7f5.dir
-      size: 41265
+      md5: 10885476394e2c794345b1c36c017361.dir
+      size: 89298
       nfiles: 3
