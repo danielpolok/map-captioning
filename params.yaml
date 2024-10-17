@@ -1,0 +1,9 @@
+
+dataset_download:
+  path: kraina/text2tile
+  split: train[:5]
+
+captioning:
+  provider: openai
+  model: gpt-4o-mini
+  prompt_template: complex

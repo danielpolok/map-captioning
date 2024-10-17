@@ -1,8 +1,16 @@
 stages:
   dataset_download:
-    cmd: python src/dataset_download.py
+    cmd:  python src/dataset_downloading.py
     params:
-    - dataset
-    - split
+    - dataset_download.path
+    - dataset_download.split
     outs:
-    - data/input
+    - data/dataset/input
+  captioning:
+    cmd: pdm run src/captioning.py
+    params:
+      - captioning.provider
+      - captioning.model
+      - captioning.prompt_template
+    outs:
+      - data/dataset/output

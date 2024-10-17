@@ -1,0 +1,27 @@
+schema: '2.0'
+stages:
+  dataset_download:
+    cmd: python src/dataset_downloading.py
+    params:
+      params.yaml:
+        dataset_download.path: kraina/text2tile
+        dataset_download.split: train[:5]
+    outs:
+    - path: data/dataset/input
+      hash: md5
+      md5: 1febfefa6529d16c2287a79c8768f2d1.dir
+      size: 82007
+      nfiles: 3
+  captioning:
+    cmd: pdm run src/captioning.py
+    params:
+      params.yaml:
+        captioning.model: gpt-4o-mini
+        captioning.prompt_template: complex
+        captioning.provider: openai
+    outs:
+    - path: data/dataset/output
+      hash: md5
+      md5: 19ab586757c45f0d7051cb26ace9d7f5.dir
+      size: 41265
+      nfiles: 3
