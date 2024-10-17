@@ -1,0 +1,8 @@
+"Describe the image in detail. The image is a single tile from an OpenStreetMap (OSM) map, which includes typical map elements such as roads, buildings, parks, and natural features. As you describe it, make sure to include specific details such as:
+
+-The layout and appearance of roads, including any labels, names, or road types (e.g., highways, streets, paths).
+-The location, shape, and size of buildings or structures.
+-The presence of green spaces, trees, parks, or bodies of water.
+-Any landmarks or points of interest such as schools, hospitals, or restaurants.
+
+Present only the description don't make any inrtoduciton in the provided caption
