@@ -26,6 +26,10 @@ Here's the corrected section:
        - `ollama`
      - `model`: Name of the model that supports vision capabilities for captioning.
      - `prompt_template`: Name of the prompt template from the `data/prompt_templates` directory.
+    
+## Results Exploration:
+The results from the pipeline, including the generated captions and dataset, are available for further exploration in the file `eda/results/exploration.ipynb`.
+
 ## Initialization Instructions:
 
 1. **Set up environment variables:**
@@ -53,4 +57,5 @@ Here's the corrected section:
      ```bash
      dvc repro
      ```
+
 
