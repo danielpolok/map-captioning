@@ -53,6 +53,9 @@ The results from the pipeline, including the generated captions and dataset, are
      ```
 
 3. **Run the pipeline**:
+   Before running the pipeline ensure that there are provided needed credentials.
+   In case using the ollama server, ensure that the server is running and the selected model is available.
+   
    - Use DVC to run the pipeline, with parameters configured in `params.yaml`:
      ```bash
      dvc repro
