@@ -1,13 +1,15 @@
-from src.llms.providers.base import CaptioningBase
+from llms.providers.base import BaseCaptioning
 import ollama
 
+from dotenv import load_dotenv
 
-class OllamaCaptioning(CaptioningBase):
+load_dotenv()
+
+
+class OllamaCaptioning(BaseCaptioning):
     def __init__(self):
         self.client = ollama
 
-    def generate_caption(self, model_name: str, img_str: str, prompt: str) -> str:
-        response = self.client.generate(
-            model=model_name, prompt=prompt, images=[img_str]
-        )
+    def generate_caption(self, model: str, img: str, prompt: str) -> str:
+        response = self.client.generate(model=model, prompt=prompt, images=[img])
         return response["response"]

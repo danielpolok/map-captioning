@@ -1,15 +1,19 @@
-from llms.providers.base import CaptioningBase
+from llms.providers.base import BaseCaptioning
 from openai import OpenAI
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Implementation for OpenAI provider
-class OpenAICaptioning(CaptioningBase):
+class OpenAICaptioning(BaseCaptioning):
     def __init__(self):
         self.client = OpenAI()
 
-    def generate_caption(self, model_name: str, img_str: str, prompt: str) -> str:
+    def generate_caption(self, model: str, img: str, prompt: str) -> str:
         response = self.client.chat.completions.create(
-            model=model_name,
+            model=model,
             messages=[
                 {
                     "role": "system",
@@ -22,7 +26,7 @@ class OpenAICaptioning(CaptioningBase):
                     "content": [
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{img_str}"},
+                            "image_url": {"url": f"data:image/jpeg;base64,{img}"},
                         },
                     ],
                 },

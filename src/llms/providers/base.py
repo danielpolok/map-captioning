@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 
 
 # Abstract base class defining the interface for captioning
-class CaptioningBase(ABC):
+class BaseCaptioning(ABC):
     @abstractmethod
-    def generate_caption(self, model_name: str, img_str: str, prompt: str) -> str:
+    def generate_caption(self, model: str, img: str, prompt: str) -> str:
         """
         Generate a caption for the given image.
 
