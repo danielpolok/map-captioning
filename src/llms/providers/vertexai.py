@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+import os
+
+print("GCP CREDENTIALS", os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+
 
 class VertexAICaptioning(BaseCaptioning):
     def __init__(self):
