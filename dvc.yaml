@@ -1,16 +1,42 @@
 stages:
-  dataset_download:
-    cmd:  python src/dataset_downloading.py
+  downloading:
+    cmd:  python src/downloading.py
     params:
-    - dataset_download.path
-    - dataset_download.split
+    - downloading.path
+    - downloading.split
     outs:
+    - data/dataset/input
+    deps:
+    - src/downloading.py
+  preprocessing:
+    cmd: python src/preprocessing.py
+    params:
+    - preprocessing.prompt_template
+    outs:
+    - data/dataset/preprocessed
+    deps:
+    - src/preprocessing.py
     - data/dataset/input
   captioning:
     cmd: pdm run src/captioning.py
     params:
       - captioning.provider
       - captioning.model
-      - captioning.prompt_template
     outs:
       - data/dataset/output
+    deps:
+      - src/captioning.py
+      - data/dataset/preprocessed
+  evaluation:
+    cmd: python src/evaluation.py
+    params:
+      - evaluation.prompt_template
+      - evaluation.provider
+      - evaluation.model
+    outs:
+      - data/dataset/evaluated
+    deps:
+      - src/evaluation.py
+      - data/dataset/output
+    metrics:
+      - eval/metrics.json

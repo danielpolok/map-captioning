@@ -1,9 +1,16 @@
 
-dataset_download:
+downloading:
   path: kraina/text2tile
-  split: train[:5]
+  split: train[:3]
+
+preprocessing:
+  prompt_template: complex
 
 captioning:
   provider: openai
   model: gpt-4o-mini
+
+evaluation:
   prompt_template: basic
+  provider: openai
+  model: gpt-4o-mini

@@ -1,27 +1,89 @@
 schema: '2.0'
 stages:
-  dataset_download:
-    cmd: python src/dataset_downloading.py
+  downloading:
+    cmd: python src/downloading.py
+    deps:
+    - path: src/downloading.py
+      hash: md5
+      md5: 9a3f521388d0e39c218c21864bf0b26c
+      size: 563
     params:
       params.yaml:
-        dataset_download.path: kraina/text2tile
-        dataset_download.split: train[:5]
+        downloading.path: kraina/text2tile
+        downloading.split: train[:3]
     outs:
     - path: data/dataset/input
       hash: md5
-      md5: 1febfefa6529d16c2287a79c8768f2d1.dir
-      size: 82007
+      md5: 1e98106443efad401cc36cefda7f50c0.dir
+      size: 57447
+      nfiles: 3
+  preprocessing:
+    cmd: python src/preprocessing.py
+    deps:
+    - path: data/dataset/input
+      hash: md5
+      md5: 3f881a3fc9401c563064f20593f2401a.dir
+      size: 184167
+      nfiles: 4
+    - path: src/preprocessing.py
+      hash: md5
+      md5: 486982e9f582aeac807208b8b6c25621
+      size: 2643
+    params:
+      params.yaml:
+        preprocessing.prompt_template: complex
+    outs:
+    - path: data/dataset/preprocessed
+      hash: md5
+      md5: b9e82d6f42813ce187db3b6a0db9cc1a.dir
+      size: 77868
       nfiles: 3
   captioning:
     cmd: pdm run src/captioning.py
+    deps:
+    - path: data/dataset/preprocessed
+      hash: md5
+      md5: 07dfbb3a88bab7cd25de91a387c90730.dir
+      size: 154332
+      nfiles: 4
+    - path: src/captioning.py
+      hash: md5
+      md5: df07a73faee919c08ce2eb2e2b245359
+      size: 1554
     params:
       params.yaml:
         captioning.model: gpt-4o-mini
-        captioning.prompt_template: basic
         captioning.provider: openai
     outs:
     - path: data/dataset/output
       hash: md5
-      md5: 10885476394e2c794345b1c36c017361.dir
-      size: 89298
+      md5: 904c17d024ff19683142c77b68202f1b.dir
+      size: 80712
       nfiles: 3
+  evaluation:
+    cmd: python src/evaluation.py
+    deps:
+    - path: data/dataset/output
+      hash: md5
+      md5: add7e2b8a3b70ed0a82a9a5443bba486.dir
+      size: 157368
+      nfiles: 4
+    - path: src/evaluation.py
+      hash: md5
+      md5: 58f6f83c60c95d96ca31092cba0a833f
+      size: 2428
+    params:
+      params.yaml:
+        evaluation.model: gpt-4o-mini
+        evaluation.prompt_template: basic
+        evaluation.provider: openai
+    outs:
+    - path: data/dataset/evaluated
+      hash: md5
+      md5: 096f2199a87239bd8d7f0aca3dbc43bf.dir
+      size: 80974
+      nfiles: 3
+    - path: eval/metrics.json
+      hash: md5
+      md5: 0b94173e6f3d6855143a3aae371673d1
+      size: 72
