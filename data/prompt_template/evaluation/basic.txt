@@ -1,0 +1,9 @@
+Evaluate the accuracy of the caption for this image by identifying how well it incorporates key features provided in the image metadata. Focus on the following criteria:
+
+-Are all primary objects or subjects from the metadata mentioned in the caption?
+-Does the caption correctly describe the location, context, or setting if included in the metadata?
+Is there any notable attribute from the metadata that is missing or inaccurately represented in the caption? Provide an assessment score from 1 to 10 based on how comprehensively the caption aligns with the metadata.
+
+Provide only the rating score as the response.
+
+Metadata:::\n {context}
