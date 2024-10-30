@@ -3,10 +3,14 @@
 -The layout and appearance of roads, including any labels, names, or road types (e.g., highways, streets, paths).
 -The location, shape, and size of buildings or structures.
 -The presence of green spaces, trees, parks, or bodies of water.
--Any landmarks or points of interest such as schools, hospitals, or restaurants.
--The level of zoom and how it affects the visibility of smaller details like street names or individual buildings.
+-Any landmarks or points of interest.
+
+Do not make any introductions, connclusions or overall summaries.
+Do not include info that the image is a OpenStreetMap tile or image.
+Your response should be a single block of text, similar as human would describe a image.
 
 Use the additional information provided about the image to make your description as accurate and detailed as possible.
+The additional information are metadata about what features are present in the image.
 
 Additional Info:::\n{context}
 "
