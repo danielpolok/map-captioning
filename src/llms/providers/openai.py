@@ -33,3 +33,23 @@ class OpenAICaptioning(BaseCaptioning):
             ],
         )
         return response.choices[0].message.content
+
+    def evaluate_caption(self, model: str, caption: str, prompt: str) -> float:
+        response = self.client.chat.completions.create(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": caption},
+                    ],
+                },
+            ],
+        )
+        return response.choices[0].message.content
