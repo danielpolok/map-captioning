@@ -1,16 +1,16 @@
 
 downloading:
   path: kraina/text2tile
-  split: train[:3]
+  split: train[:20]
 
 preprocessing:
   prompt_template: complex
 
 captioning:
-  provider: openai
-  model: gpt-4o-mini
+  provider: ollama
+  model: llava-llama3
 
 evaluation:
   prompt_template: basic
-  provider: openai
-  model: gpt-4o-mini
+  provider: ollama
+  model: llava-llama3

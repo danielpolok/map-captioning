@@ -16,7 +16,7 @@ stages:
     - data/dataset/preprocessed
     deps:
     - src/preprocessing.py
-    - data/dataset/input
+    # - data/dataset/input
   captioning:
     cmd: pdm run src/captioning.py
     params:
@@ -26,7 +26,7 @@ stages:
       - data/dataset/output
     deps:
       - src/captioning.py
-      - data/dataset/preprocessed
+      # - data/dataset/preprocessed
   evaluation:
     cmd: python src/evaluation.py
     params:
@@ -37,6 +37,6 @@ stages:
       - data/dataset/evaluated
     deps:
       - src/evaluation.py
-      - data/dataset/output
+      # - data/dataset/output
     metrics:
-      - eval/metrics.json
+      - data/eval/metrics.json
