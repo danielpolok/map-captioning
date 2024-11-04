@@ -16,6 +16,7 @@ dependencies = [
     "dvc[parquet]>=3.55.2",
     "certifi>=2024.8.30",
     "python-box>=7.2.0",
+    "streamlit>=1.39.0",
 ]
 requires-python = "==3.10.*"
 readme = "README.md"
