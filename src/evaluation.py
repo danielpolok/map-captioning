@@ -4,6 +4,7 @@ from ruamel.yaml import YAML
 
 from datasets import load_from_disk
 from functools import partial
+import re
 
 import shutil
 
@@ -28,6 +29,10 @@ captioning_provider_mapping = {
 
 def evaluate(provider: BaseCaptioning, model: str, caption: str, prompt: str) -> str:
     grade = provider.evaluate_caption(model, caption, prompt)
+
+    match = re.search(r"\d+", grade)
+    grade = match.group(0)
+
     return int(grade)
 
 
@@ -76,7 +81,7 @@ def evaluation():
         "max_score": float(dataset_evaluated_df["llm_metric"].max()),
     }
 
-    metrics_path = Path("eval/metrics.json")
+    metrics_path = Path("data/eval/metrics.json")
     json.dump(metrics, open(metrics_path, "w"))
 
 
