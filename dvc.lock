@@ -1,79 +1,32 @@
 schema: '2.0'
 stages:
-  downloading:
-    cmd: python src/downloading.py
+  data_collection:
+    cmd: pdm run src/data_collection.py
     deps:
-    - path: src/downloading.py
+    - path: src/data_collection.py
       hash: md5
-      md5: 9a3f521388d0e39c218c21864bf0b26c
-      size: 563
+      md5: 7ba41f03b4551ea664143346d1a7531d
+      size: 593
     params:
       params.yaml:
-        downloading.path: kraina/text2tile
-        downloading.split: train[:20]
+        data_collection.path: kraina/text2tile
+        data_collection.split: train[:100]
     outs:
     - path: data/dataset/input
       hash: md5
-      md5: 5eab17ae23413aac8c0108030bc6128b.dir
-      size: 303912
+      md5: 7897ceefb6e27cf3ec0ef4948aee2a54.dir
+      size: 2133009
       nfiles: 3
-  preprocessing:
-    cmd: python src/preprocessing.py
+  data_preprocessing:
+    cmd: pdm run src/data_preprocessing.py
     deps:
-    - path: src/preprocessing.py
+    - path: src/data_preprocessing.py
       hash: md5
-      md5: 486982e9f582aeac807208b8b6c25621
-      size: 2643
-    params:
-      params.yaml:
-        preprocessing.prompt_template: complex
+      md5: c8551599933512da7221c166e3be4e49
+      size: 1558
     outs:
     - path: data/dataset/preprocessed
       hash: md5
-      md5: 1f37959fb0a29b2c45bfd2507ba6ed09.dir
-      size: 423077
+      md5: f341d81cb509238cb1ec231644439d15.dir
+      size: 2825051
       nfiles: 3
-  captioning:
-    cmd: pdm run src/captioning.py
-    deps:
-    - path: data/dataset/preprocessed
-      hash: md5
-      md5: de538ef847884c24f1a8110eea0aa635.dir
-      size: 863877
-      nfiles: 4
-    - path: src/captioning.py
-      hash: md5
-      md5: df07a73faee919c08ce2eb2e2b245359
-      size: 1554
-    params:
-      params.yaml:
-        captioning.model: llava-llama3
-        captioning.provider: ollama
-    outs:
-    - path: data/dataset/output
-      hash: md5
-      md5: d417f7b9319f8eddf15f74f86a4d4c54.dir
-      size: 445049
-      nfiles: 3
-  evaluation:
-    cmd: python src/evaluation.py
-    deps:
-    - path: src/evaluation.py
-      hash: md5
-      md5: 56e4074168bbd8751290e61ac891a23f
-      size: 2514
-    params:
-      params.yaml:
-        evaluation.model: llava-llama3
-        evaluation.prompt_template: basic
-        evaluation.provider: ollama
-    outs:
-    - path: data/dataset/evaluated
-      hash: md5
-      md5: 66d85dacb012a59457183fa2e8b47061.dir
-      size: 445447
-      nfiles: 3
-    - path: data/eval/metrics.json
-      hash: md5
-      md5: d73c7bec00e009371cfdc613ec98f428
-      size: 58

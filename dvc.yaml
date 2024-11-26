@@ -1,42 +1,42 @@
 stages:
-  downloading:
-    cmd:  python src/downloading.py
+  data_collection:
+    cmd:  pdm run src/data_collection.py
     params:
-    - downloading.path
-    - downloading.split
+    - data_collection.path
+    - data_collection.split
     outs:
     - data/dataset/input
     deps:
-    - src/downloading.py
-  preprocessing:
-    cmd: python src/preprocessing.py
-    params:
-    - preprocessing.prompt_template
+    - src/data_collection.py
+  data_preprocessing:
+    cmd: pdm run src/data_preprocessing.py
+    # params:
     outs:
     - data/dataset/preprocessed
     deps:
-    - src/preprocessing.py
+    - src/data_preprocessing.py
     # - data/dataset/input
-  captioning:
-    cmd: pdm run src/captioning.py
+  caption_generation:
+    cmd: pdm run src/caption_generation.py
     params:
-      - captioning.provider
-      - captioning.model
+      - caption_generation.prompt_template
+      - caption_generation.provider
+      - caption_generation.model
     outs:
       - data/dataset/output
     deps:
-      - src/captioning.py
+      - src/caption_generation.py
       # - data/dataset/preprocessed
-  evaluation:
-    cmd: python src/evaluation.py
+  caption_evaluation:
+    cmd: python src/caption_evaluation.py
     params:
-      - evaluation.prompt_template
-      - evaluation.provider
-      - evaluation.model
+      - caption_evaluation.prompt_template
+      - caption_evaluation.provider
+      - caption_evaluation.model
     outs:
       - data/dataset/evaluated
     deps:
-      - src/evaluation.py
+      - src/caption_evaluation.py
       # - data/dataset/output
     metrics:
       - data/eval/metrics.json

@@ -1,16 +1,38 @@
 
-downloading:
+data_collection:
   path: kraina/text2tile
-  split: train[:20]
+  split: train[:100]
 
-preprocessing:
+# data_preprocessing:
+  
+
+# caption_generation:
+#   prompt_template: complex
+#   provider: openai
+#   model: gpt-4o-mini
+
+# caption_evaluation:
+#   prompt_template: complex
+#   provider: openai
+#   model: gpt-4o-mini
+
+# caption_generation:
+#   prompt_template: complex
+#   provider: vertexai
+#   model: gemini-1.5-pro-002
+
+# caption_evaluation:
+#   prompt_template: complex
+#   provider: vertexai
+#   model: gemini-1.5-pro-002
+
+
+caption_generation:
   prompt_template: complex
-
-captioning:
   provider: ollama
-  model: llava-llama3
+  model: llama3.2-vision
 
-evaluation:
-  prompt_template: basic
+caption_evaluation:
+  prompt_template: complex
   provider: ollama
-  model: llava-llama3
+  model: llama3.2-vision
