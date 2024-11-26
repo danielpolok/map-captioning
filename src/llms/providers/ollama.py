@@ -14,8 +14,7 @@ class OllamaCaptioning(BaseCaptioning):
         response = self.client.generate(model=model, prompt=prompt, images=[img])
         return response["response"]
 
-    def evaluate_caption(self, model: str, caption: str, prompt: str) -> float:
-        # Corrected: Use appropriate parameter name and structure for evaluation
-        prompt = prompt + caption
+    def evaluate_caption(self, model: str, prompt: str) -> str:
+        prompt = prompt
         response = self.client.generate(model=model, prompt=prompt)
         return response["response"]

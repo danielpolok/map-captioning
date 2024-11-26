@@ -12,13 +12,21 @@ class OpenAICaptioning(BaseCaptioning):
         self.client = OpenAI()
 
     def generate_caption(self, model: str, img: str, prompt: str) -> str:
+        system, user = prompt.split("**Context:**")
+
         response = self.client.chat.completions.create(
             model=model,
             messages=[
                 {
                     "role": "system",
                     "content": [
-                        {"type": "text", "text": prompt},
+                        {"type": "text", "text": system},
+                    ],
+                },
+                {
+                    "role": "system",
+                    "content": [
+                        {"type": "text", "text": user},
                     ],
                 },
                 {
@@ -34,20 +42,22 @@ class OpenAICaptioning(BaseCaptioning):
         )
         return response.choices[0].message.content
 
-    def evaluate_caption(self, model: str, caption: str, prompt: str) -> float:
+    def evaluate_caption(self, model: str, prompt: str) -> str:
+
+        system, user = prompt.split("**Context:**")
         response = self.client.chat.completions.create(
             model=model,
             messages=[
                 {
                     "role": "system",
                     "content": [
-                        {"type": "text", "text": prompt},
+                        {"type": "text", "text": system},
                     ],
                 },
                 {
-                    "role": "user",
+                    "role": "system",
                     "content": [
-                        {"type": "text", "text": caption},
+                        {"type": "text", "text": user},
                     ],
                 },
             ],

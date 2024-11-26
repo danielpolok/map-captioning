@@ -17,3 +17,7 @@ class VertexAICaptioning(BaseCaptioning):
     def generate_caption(self, model: str, img: str, prompt: str) -> str:
         response = self.client(model).generate_content([prompt, img])
         return response.candidates[0].content.parts[0].text
+
+    def evaluate_caption(self, model: str, prompt: str) -> float:
+        response = self.client(model).generate_content([prompt])
+        return response.candidates[0].content.parts[0].text
