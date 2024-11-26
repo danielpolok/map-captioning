@@ -28,25 +28,29 @@ captioning_provider_mapping = {
 
 
 def evaluate(provider: BaseCaptioning, model: str, caption: str, prompt: str) -> str:
-    grade = provider.evaluate_caption(model, caption, prompt)
+    score = provider.evaluate_caption(model, prompt)
 
-    match = re.search(r"\d+", grade)
-    grade = match.group(0)
+    match = re.search(r"\d+", score)
+    score = match.group(0)
 
-    return int(grade)
+    return int(score)
 
 
 def process(example, provider: BaseCaptioning, model: str, prompt_template: str):
-    prompt = prompt_template.format(context=example["context"])
-    grade = evaluate(provider, model, example["caption"], prompt)
-    return {"llm_metric": grade}
+    prompt = prompt_template.format(
+        image_additional_informations=example["context"],
+        generated_caption=example["caption"],
+    )
+    score = evaluate(provider, model, example["caption"], prompt)
+    return {"score": score}
 
 
-def evaluation():
+def caption_evaluation():
     params = ConfigBox(yaml.load(open("params.yaml", encoding="utf-8")))
-    provider = params.evaluation.provider
-    model = params.evaluation.model
-    prompt_template_param = params.evaluation.prompt_template
+
+    prompt_template_param = params.caption_evaluation.prompt_template
+    provider = params.caption_evaluation.provider
+    model = params.caption_evaluation.model
 
     prompt_file = (
         prompt_template_param
@@ -76,9 +80,9 @@ def evaluation():
     dataset_evaluated_df = dataset_evaluated.to_pandas()
 
     metrics = {
-        "average_score": float(dataset_evaluated_df["llm_metric"].mean()),
-        "min_score": float(dataset_evaluated_df["llm_metric"].min()),
-        "max_score": float(dataset_evaluated_df["llm_metric"].max()),
+        "average_score": float(dataset_evaluated_df["score"].mean()),
+        "min_score": float(dataset_evaluated_df["score"].min()),
+        "max_score": float(dataset_evaluated_df["score"].max()),
     }
 
     metrics_path = Path("data/eval/metrics.json")
@@ -86,4 +90,4 @@ def evaluation():
 
 
 if __name__ == "__main__":
-    evaluation()
+    caption_evaluation()

@@ -127,7 +127,7 @@ def display_table():
         with col2:
             st.write(f"**Context:** {row['context']}")
             st.write(f"**Caption:** {row['caption']}")
-            st.write(f"**LLM Metric:** {row['llm_metric']}")
+            st.write(f"**LLM Metric:** {row['score']}")
         st.markdown("---")
 
 

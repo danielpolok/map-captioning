@@ -31,16 +31,27 @@ def generate(provider: BaseCaptioning, model: str, img: str, prompt: str) -> str
     return provider.generate_caption(model, img, prompt)
 
 
-def process(example, provider: BaseCaptioning, model: str):
-    caption = generate(provider, model, example["image_encoded"], example["prompt"])
+def process(example, provider: BaseCaptioning, model: str, prompt_template: str):
+    prompt = prompt_template.format(image_additional_informations=example["context"])
+    caption = generate(provider, model, example["image_encoded"], prompt)
     return {"caption": caption}
 
 
-def captioning():
+def caption_generation():
     params = ConfigBox(yaml.load(open("params.yaml", encoding="utf-8")))
 
-    provider = params.captioning.provider
-    model = params.captioning.model
+    prompt_template_param = params.caption_generation.prompt_template
+    provider = params.caption_generation.provider
+    model = params.caption_generation.model
+
+    prompt_file = (
+        prompt_template_param
+        if prompt_template_param.endswith(".txt")
+        else prompt_template_param.strip() + ".txt"
+    )
+
+    prompt_template_path = Path("data/prompt_template/captioning") / prompt_file
+    prompt_template = prompt_template_path.read_text()
 
     dataset_dir = Path("data/dataset/preprocessed")
     dataset = load_from_disk(dataset_dir)
@@ -48,7 +59,9 @@ def captioning():
     provider_obj = captioning_provider_mapping[provider]()
 
     dataset_captioned = dataset.map(
-        partial(process, provider=provider_obj, model=model),
+        partial(
+            process, provider=provider_obj, model=model, prompt_template=prompt_template
+        ),
         # batch=true, # TODO
     )
 
@@ -58,4 +71,4 @@ def captioning():
 
 
 if __name__ == "__main__":
-    captioning()
+    caption_generation()

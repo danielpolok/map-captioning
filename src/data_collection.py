@@ -8,11 +8,13 @@ from datasets import load_dataset
 yaml = YAML(typ="safe")
 
 
-def dataset_downloading() -> None:
+def data_collection() -> None:
     params = ConfigBox(yaml.load(open("params.yaml", encoding="utf-8")))
 
-    dataset_name = params.downloading.path
-    split = params.downloading.split
+    dataset_name = params.data_collection.path
+    split = params.data_collection.split
+
+    print("SPLIT:", split)
 
     dataset_dir = Path("data") / "dataset" / "input"
 
@@ -21,4 +23,4 @@ def dataset_downloading() -> None:
 
 
 if __name__ == "__main__":
-    dataset_downloading()
+    data_collection()

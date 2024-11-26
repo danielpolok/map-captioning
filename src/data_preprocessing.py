@@ -32,30 +32,13 @@ def transform_caption(caption: str):
     return caption.split(":", 1)[1].strip()
 
 
-def create_prompt(
-    context: str,
-    prompt_template: str,
-) -> str:
-
-    if "{context}" in prompt_template:
-        # Format the prompt_template with the provided context
-        formatted_prompt = prompt_template.format(context=context)
-    else:
-        # If {context} is not present, return the prompt_template as is
-        formatted_prompt = prompt_template
-
-    return formatted_prompt
-
-
 ### Pre-process
-def preprocess(example, prompt_template: str):
+def process(example):
     image = encode_img(example["image"])
     transformed_caption = transform_caption(example["caption"])
-    prompt = create_prompt(transformed_caption, prompt_template)
 
     return {
         "image_encoded": image,
-        "prompt": prompt,
         "context": transformed_caption,
     }
 
@@ -63,30 +46,15 @@ def preprocess(example, prompt_template: str):
 def dataset_preprocessing():
     params = ConfigBox(yaml.load(open("params.yaml", encoding="utf-8")))
 
-    prompt_template_param = params.preprocessing.prompt_template
-
-    prompt_template_file = (
-        prompt_template_param
-        if prompt_template_param.endswith(".txt")
-        else prompt_template_param.strip() + ".txt"
-    )
-
-    prompt_template_path = (
-        Path("data/prompt_template/captioning") / prompt_template_file
-    )
-    prompt_template = prompt_template_path.read_text()
-
     dataset_dir = Path("data/dataset/input")
     dataset = load_from_disk(dataset_dir)
 
     dataset_preprocessed = dataset.map(
-        partial(preprocess, prompt_template=prompt_template)
+        process
         # batch=true # TODO
     )
 
-    # dataset_preprocessed = dataset_preprocessed.rename_column("caption", "context")
-
-    new_column_order = ["image_encoded", "context", "prompt"]
+    new_column_order = ["image_encoded", "context"]
     dataset_preprocessed = dataset_preprocessed.select_columns(new_column_order)
 
     dataset_out_dir = Path("data/dataset/preprocessed")
