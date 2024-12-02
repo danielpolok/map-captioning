@@ -33,7 +33,13 @@ def generate(provider: BaseCaptioning, model: str, img: str, prompt: str) -> str
 
 def process(example, provider: BaseCaptioning, model: str, prompt_template: str):
     prompt = prompt_template.format(image_additional_informations=example["context"])
-    caption = generate(provider, model, example["image_encoded"], prompt)
+    while True:
+        try:
+            caption = generate(provider, model, example["image_encoded"], prompt)
+            break
+        except:
+            pass
+
     return {"caption": caption}
 
 
