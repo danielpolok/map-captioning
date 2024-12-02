@@ -1,7 +1,7 @@
 
 data_collection:
   path: kraina/text2tile
-  split: train[:100]
+  split: train[:10]
 
 # data_preprocessing:
   
@@ -24,15 +24,18 @@ data_collection:
 # caption_evaluation:
 #   prompt_template: complex
 #   provider: vertexai
-#   model: gemini-1.5-pro-002
+#   model: gemini-1.5-flash-002
 
 
 caption_generation:
   prompt_template: complex
   provider: ollama
   model: llama3.2-vision
+  dataset_name: llama3.2-vision-captioned
 
 caption_evaluation:
   prompt_template: complex
-  provider: ollama
-  model: llama3.2-vision
+  provider: vertexai
+  model: gemini-1.5-pro-002
+
+

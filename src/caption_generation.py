@@ -28,7 +28,7 @@ captioning_provider_mapping = {
 
 
 def generate(provider: BaseCaptioning, model: str, img: str, prompt: str) -> str:
-    return provider.generate_caption(model, img, prompt)
+    return provider.generate(model, img, prompt)
 
 
 def process(example, provider: BaseCaptioning, model: str, prompt_template: str):
@@ -37,7 +37,9 @@ def process(example, provider: BaseCaptioning, model: str, prompt_template: str)
         try:
             caption = generate(provider, model, example["image_encoded"], prompt)
             break
-        except:
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Retrying...")
             pass
 
     return {"caption": caption}
@@ -49,6 +51,7 @@ def caption_generation():
     prompt_template_param = params.caption_generation.prompt_template
     provider = params.caption_generation.provider
     model = params.caption_generation.model
+    dataset_name = params.caption_generation.dataset_name
 
     prompt_file = (
         prompt_template_param
@@ -65,13 +68,15 @@ def caption_generation():
     provider_obj = captioning_provider_mapping[provider]()
 
     dataset_captioned = dataset.map(
-        partial(
-            process, provider=provider_obj, model=model, prompt_template=prompt_template
-        ),
+        process,
+        fn_kwargs={
+            "provider": provider_obj,
+            "model": model,
+            "prompt_template": prompt_template,
+        },
         # batch=true, # TODO
     )
-
-    dataset_out_dir = Path("data") / "dataset" / "output"
+    dataset_out_dir = Path("data") / "dataset" / "output" / dataset_name
 
     dataset_captioned.save_to_disk(dataset_out_dir)
 

@@ -15,18 +15,19 @@ stages:
     - data/dataset/preprocessed
     deps:
     - src/data_preprocessing.py
-    # - data/dataset/input
+    - data/dataset/input
   caption_generation:
     cmd: pdm run src/caption_generation.py
     params:
       - caption_generation.prompt_template
       - caption_generation.provider
       - caption_generation.model
+      - caption_generation.dataset_name
     outs:
-      - data/dataset/output
+      - data/dataset/output/${caption_generation.dataset_name}
     deps:
       - src/caption_generation.py
-      # - data/dataset/preprocessed
+      - data/dataset/preprocessed
   caption_evaluation:
     cmd: python src/caption_evaluation.py
     params:
@@ -37,6 +38,6 @@ stages:
       - data/dataset/evaluated
     deps:
       - src/caption_evaluation.py
-      # - data/dataset/output
-    metrics:
-      - data/eval/metrics.json
+      - data/dataset/output
+    # metrics:
+    #   - data/eval/metrics.json
