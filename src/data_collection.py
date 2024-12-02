@@ -14,8 +14,6 @@ def data_collection() -> None:
     dataset_name = params.data_collection.path
     split = params.data_collection.split
 
-    print("SPLIT:", split)
-
     dataset_dir = Path("data") / "dataset" / "input"
 
     dataset = load_dataset(path=dataset_name, split=split)
