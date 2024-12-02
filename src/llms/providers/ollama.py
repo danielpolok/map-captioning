@@ -10,11 +10,6 @@ class OllamaCaptioning(BaseCaptioning):
     def __init__(self):
         self.client = ollama
 
-    def generate_caption(self, model: str, img: str, prompt: str) -> str:
+    def generate(self, model: str, img: str, prompt: str) -> str:
         response = self.client.generate(model=model, prompt=prompt, images=[img])
-        return response["response"]
-
-    def evaluate_caption(self, model: str, prompt: str) -> str:
-        prompt = prompt
-        response = self.client.generate(model=model, prompt=prompt)
         return response["response"]

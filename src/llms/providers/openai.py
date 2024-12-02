@@ -11,7 +11,7 @@ class OpenAICaptioning(BaseCaptioning):
     def __init__(self):
         self.client = OpenAI()
 
-    def generate_caption(self, model: str, img: str, prompt: str) -> str:
+    def generate(self, model: str, img: str, prompt: str) -> str:
         system, user = prompt.split("**Context:**")
 
         response = self.client.chat.completions.create(
@@ -36,28 +36,6 @@ class OpenAICaptioning(BaseCaptioning):
                             "type": "image_url",
                             "image_url": {"url": f"data:image/jpeg;base64,{img}"},
                         },
-                    ],
-                },
-            ],
-        )
-        return response.choices[0].message.content
-
-    def evaluate_caption(self, model: str, prompt: str) -> str:
-
-        system, user = prompt.split("**Context:**")
-        response = self.client.chat.completions.create(
-            model=model,
-            messages=[
-                {
-                    "role": "system",
-                    "content": [
-                        {"type": "text", "text": system},
-                    ],
-                },
-                {
-                    "role": "system",
-                    "content": [
-                        {"type": "text", "text": user},
                     ],
                 },
             ],
