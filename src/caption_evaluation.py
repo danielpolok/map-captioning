@@ -163,9 +163,12 @@ def caption_evaluation():
     provider_obj = captioning_provider_mapping[provider]()
 
     dataset_evaluated = dataset_merged.map(
-        partial(
-            process, provider=provider_obj, model=model, prompt_template=prompt_template
-        ),
+        process,
+        fn_kwargs={
+            "provider": provider_obj,
+            "model": model,
+            "prompt_template": prompt_template,
+        },
         # batch=true, # TODO
     )
 
