@@ -6,11 +6,20 @@ import re
 import base64
 from io import BytesIO
 from PIL import Image, UnidentifiedImageError
+import json
 
 # Load data (replace with the actual data path)
 dataset_output_dir = Path("data/dataset/evaluated")
+metrics_file_path = Path("data/eval/metrics.json")
 
 dataset = load_from_disk(dataset_output_dir).to_pandas()
+
+# Load metrics.json
+with open(metrics_file_path, "r") as f:
+    metrics = json.load(f)
+
+# Extract Win Rates
+win_rates = {k: v for k, v in metrics.items()}
 
 # Initialize a set to store unique feature names
 context_features = set()
@@ -33,7 +42,6 @@ for context in dataset["context"]:
 context_features = sorted(list(context_features))
 
 # Streamlit app
-# st.set_page_config(layout="wide")
 st.title("Captioning Pipeline Evaluated Results")
 
 # Top filters
@@ -44,7 +52,6 @@ feature_counts = {
     feature: dataset["context"].apply(lambda x: feature in x).sum()
     for feature in context_features
 }
-
 
 st.markdown(
     """
@@ -58,7 +65,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
 # Display options with counts in the top filter (full feature names)
 context_type_filter = st.multiselect(
     "Context Type",
@@ -67,6 +73,11 @@ context_type_filter = st.multiselect(
     format_func=lambda x: x,  # Ensure full name is always displayed
     help="Hover over an option to see the full name",
 )
+
+# Display Win Rates
+st.subheader("Win Rates")
+for model, rate in win_rates.items():
+    st.write(f"**{model}**: {rate}")
 
 # Extract selected features (removing counts)
 selected_features = [
@@ -84,6 +95,7 @@ else:
     filtered_df = dataset
 
 # Display the number of filtered results
+st.header("Results")
 st.write(f"Number of results: {len(filtered_df)}")
 
 
@@ -114,6 +126,11 @@ def change_page(new_page):
 start_idx = (page_number - 1) * items_per_page
 end_idx = start_idx + items_per_page
 
+column_names = dataset.columns
+dataset_caption_columns = [
+    column for column in column_names if re.match(r"caption_\w+", column)
+]
+
 
 def display_table():
     for idx, row in filtered_df.reset_index().iloc[start_idx:end_idx].iterrows():
@@ -126,8 +143,10 @@ def display_table():
                 st.image(image, use_column_width=True)
         with col2:
             st.write(f"**Context:** {row['context']}")
-            st.write(f"**Caption:** {row['caption']}")
-            st.write(f"**LLM Metric:** {row['score']}")
+            for column in dataset_caption_columns:
+                with st.expander(f"**{column.capitalize()}**"):
+                    st.write(row[column])
+            st.write(f"**LLM Choice:** {row['llm_choice']}")
         st.markdown("---")
 
 
